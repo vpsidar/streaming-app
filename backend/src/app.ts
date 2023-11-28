@@ -1,5 +1,6 @@
 import express,{Request,Response} from 'express'
 import cors from 'cors'
+import AuthController from './api/controllers/auth.controller';
 export default class App {
     private express = express();
     private readonly PORT = 8080;
@@ -7,9 +8,11 @@ export default class App {
         this.express.get('/',(req:Request,res:Response) => {
             res.status(200).json({'message': 'Hello from streaming app'});
         })
-        //this.express.use(this.makeAuthenticationController().registerRoute());
-        //this.express.use("/customers",this.makeCustomerController().registerRoute());
+        this.express.use(this.makeAuthenticationController().registerRoute());
         return this;
+    }
+    private makeAuthenticationController() {
+        return new AuthController();
     }
     async startExpressServer() {
         this.express.use(cors());
